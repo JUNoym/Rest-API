@@ -2,7 +2,16 @@ const express = require('express')
 const app = express()
 const sqlite3 = require('sqlite3')
 const dbPath = "app/db/database.sqlite3"
+const path = require('path')
 
+// express.staticはスタティックコンテンツを返す簡易WEBサーバーを作るメソッド
+// publicをルートディレクトリに指定
+//path.joinは第一引数と第二引数をパスをつなぐメソッド
+//dirnameにはapp.jsがあるパスが入る
+app.use(express.static(path.join(__dirname, 'public')))
+
+
+// 全てのユーザーを取得
 app.get('/api/v1/users', (req, res) => {
     const db = new sqlite3.Database(dbPath)
 
@@ -13,6 +22,7 @@ app.get('/api/v1/users', (req, res) => {
     db.close()
 })
 
+// :idに指定されたユーザー情報を取得する
 app.get('/api/v1/users/:id', (req, res) => {
     const db = new sqlite3.Database(dbPath)
     const id = req.params.id
@@ -24,6 +34,7 @@ app.get('/api/v1/users/:id', (req, res) => {
     db.close()
 })
 
+// 検索実装
 app.get('/api/v1/search', (req, res) => {
     const db = new sqlite3.Database(dbPath)
     const keyword = req.query.q
