@@ -2,7 +2,7 @@
 
 const usersModule = (() => {
     const BASE_URL = "http://localhost:3000/api/v1/users"
-
+    // # usersの情婦を全て取得するAPI
     return {
         fetchAllUsers: async () => {
             const res = await fetch(BASE_URL)

@@ -4,6 +4,9 @@ const sqlite3 = require('sqlite3')
 const dbPath = "app/db/database.sqlite3"
 const path = require('path')
 
+// データベースに接続するときにnpm run connectで接続するとdatabase.sqlite3が
+// 開けないから　sqlite3 app/db/database.sqlite3として接続する
+
 // express.staticはスタティックコンテンツを返す簡易WEBサーバーを作るメソッド
 // publicをルートディレクトリに指定
 //path.joinは第一引数と第二引数をパスをつなぐメソッド
@@ -12,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 // 全てのユーザーを取得
-app.get('/api/v1/users', (req, res) => {
+app.get('/api/v1/users', (err, res) => {
     const db = new sqlite3.Database(dbPath)
 
     db.all('SELECT * FROM users;', (err, rows) => {
@@ -22,7 +25,9 @@ app.get('/api/v1/users', (req, res) => {
     db.close()
 })
 
+
 // :idに指定されたユーザー情報を取得する
+// db.getは１つだけデータを取得する
 app.get('/api/v1/users/:id', (req, res) => {
     const db = new sqlite3.Database(dbPath)
     const id = req.params.id
